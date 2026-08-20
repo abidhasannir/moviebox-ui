@@ -19,17 +19,17 @@ Clone and run MovieBox Web with a single command for your operating system:
 
 ### 🍎 macOS & 🐧 Linux (Terminal / Zsh / Bash)
 ```bash
-git clone https://github.com/your-username/MovieBox-Web.git && cd MovieBox-Web && python3 movie.py
+git clone https://github.com/abidhasannir/moviebox-ui.git && cd moviebox-ui && python3 movie.py
 ```
 
 ### 🪟 Windows (PowerShell)
 ```powershell
-git clone https://github.com/your-username/MovieBox-Web.git; cd MovieBox-Web; python movie.py
+git clone https://github.com/abidhasannir/moviebox-ui.git; cd moviebox-ui; python movie.py
 ```
 
 ### 🪟 Windows (Command Prompt - CMD)
 ```cmd
-git clone https://github.com/your-username/MovieBox-Web.git && cd MovieBox-Web && python movie.py
+git clone https://github.com/abidhasannir/moviebox-ui.git && cd moviebox-ui && python movie.py
 ```
 
 > 💡 **Zero Configuration Required!**  
