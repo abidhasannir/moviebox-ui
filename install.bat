@@ -1,0 +1,3 @@
+@echo off
+echo 🎬 Setting up MovieBox Web...
+python movie.py

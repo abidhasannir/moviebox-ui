@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieBox Web</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <button class="mobile-menu-btn" onclick="toggleMobileDrawer()" title="Open Menu">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="logo" onclick="onLogoClick()">MovieBox<span>.</span>Web</div>
+        </div>
+
+        <div class="search-bar" id="searchBar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search movies, tv shows..." onkeydown="handleSearch(event)">
+        </div>
+
+        <div class="header-actions">
+            <button class="mobile-search-toggle" onclick="toggleMobileSearch()" title="Search">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+            <button class="header-btn shortcut-btn" onclick="toggleShortcutsModal()" title="Keyboard Shortcuts">
+                ⌨️ <span class="btn-text">Shortcuts</span>
+            </button>
+            <button class="header-btn app-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span class="btn-text">Download App</span>
+            </button>
+            <button class="header-btn login-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span class="btn-text">Log in</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Slide-Out Drawer -->
+    <div id="mobile-drawer" class="mobile-drawer-overlay" onclick="closeMobileDrawer(event)">
+        <div class="mobile-drawer-content" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <div class="logo" onclick="onLogoClick(); toggleMobileDrawer();">MovieBox<span>.</span>Web</div>
+                <button class="modal-close-btn" onclick="toggleMobileDrawer()">✕</button>
+            </div>
+            <div class="drawer-nav">
+                <button class="drawer-item" onclick="onLogoClick(); toggleMobileDrawer();">
+                    🏠 Home
+                </button>
+                <button class="drawer-item" onclick="toggleShortcutsModal(); toggleMobileDrawer();">
+                    ⌨️ Keyboard Shortcuts
+                </button>
+                <button class="drawer-item">
+                    📱 Download App
+                </button>
+                <button class="drawer-item">
+                    👤 Log in
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <main id="app">
+        <div class="loader active" id="main-loader"></div>
+        <div id="content-area"></div>
+    </main>
+
+    <div id="player-page" class="player-page hidden">
+        <div class="player-layout">
+            <!-- Left Column: Video & Meta -->
+            <div class="player-main-column">
+                <div class="video-container" id="video-container">
+                    <div id="player-message" class="player-message"></div>
+                    <div class="player-container" id="player-container">
+                        <video id="video-player" class="player" playsinline crossorigin="anonymous"></video>
+                    </div>
+                </div>
+                
+                <!-- Under-video Notice Bar -->
+                <div class="video-notice-bar">
+                    <span>Find any content infringes on your rights, please contact us.</span>
+                    <button class="report-btn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Report
+                    </button>
+                </div>
+
+                <!-- Movie Meta Info Section -->
+                <div class="movie-meta-info">
+                    <div class="meta-left">
+                        <h1 class="meta-title" id="meta-title">Movie Title</h1>
+                        <span id="meta-year" class="meta-year"></span>
+                        <p id="meta-desc" class="meta-desc"></p>
+                        <div class="meta-tags">
+                            <span id="meta-genres-val"></span>
+                        </div>
+                        <div class="meta-subtitles">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="14" y1="12" x2="18" y2="12"/><line x1="6" y1="16" x2="14" y2="16"/></svg>
+                            <span id="meta-subs-val">Subtitles: English, Indonesian, Malay</span>
+                        </div>
+                    </div>
+                    <div class="meta-right">
+                        <div class="meta-rating-box">
+                            <span id="meta-rating-val" class="rating-num">8.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Sidebar -->
+            <div class="player-sidebar">
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Resources</h3>
+                    <div class="resources-meta">
+                        <span>Source: fzmovies.cms</span>
+                        <span class="meta-author">| By Zamani Mbatha 🇿🇦</span>
+                    </div>
+                    
+                    <div class="sidebar-dropdowns">
+                        <select class="custom-select" id="audio-select">
+                            <option>Hindi dub</option>
+                            <option>Original</option>
+                        </select>
+                        <select class="custom-select" id="season-select">
+                            <option>Season 01</option>
+                        </select>
+                    </div>
+                    
+                    <div class="episodes-grid" id="episodes-grid">
+                        <!-- Episodes rendered dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div id="shortcuts-modal" class="modal-overlay" onclick="closeShortcutsModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>⌨️ Keyboard Shortcuts</h3>
+                <button class="modal-close-btn" onclick="toggleShortcutsModal()">✕</button>
+            </div>
+            <div class="shortcuts-grid">
+                <div class="shortcut-item">
+                    <span class="shortcut-desc">Play / Pause</span>
+                    <div class="shortcut-keys"><kbd>Space</kbd> or <kbd>K</kbd></div>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-desc">Toggle Fullscreen</span>
+                    <div class="shortcut-keys"><kbd>F</kbd></div>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-desc">Mute / Unmute</span>
+                    <div class="shortcut-keys"><kbd>M</kbd></div>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-desc">Toggle Subtitles</span>
+                    <div class="shortcut-keys"><kbd>C</kbd></div>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-desc">Seek ±5 Seconds</span>
+                    <div class="shortcut-keys"><kbd>←</kbd> <kbd>→</kbd></div>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-desc">Seek ±10 Seconds</span>
+                    <div class="shortcut-keys"><kbd>J</kbd> <kbd>L</kbd></div>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-desc">Volume Up / Down</span>
+                    <div class="shortcut-keys"><kbd>↑</kbd> <kbd>↓</kbd></div>
+                </div>
+                <div class="shortcut-item">
+                    <span class="shortcut-desc">Seek to 0% – 90%</span>
+                    <div class="shortcut-keys"><kbd>0</kbd> – <kbd>9</kbd></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

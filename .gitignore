@@ -1,0 +1,12 @@
+# Python & Virtual Env
+venv/
+__pycache__/
+*.pyc
+*.log
+server.log
+
+# IDE & OS files
+.DS_Store
+.vscode/
+.idea/
+Thumbs.db
