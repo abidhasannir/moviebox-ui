@@ -22,15 +22,20 @@ Clone and run MovieBox Web with a single command for your operating system:
 git clone https://github.com/abidhasannir/moviebox-ui.git && cd moviebox-ui && python3 movie.py
 ```
 
-### 🪟 Windows (PowerShell)
+### 🪟 Windows (Double-Click Launcher - Silent & No Script Blocks)
+Double-click **`run_windows.vbs`** directly in the project folder to launch MovieBox Web silently without PowerShell execution policy blocks or black command prompt windows!
+
+### 🪟 Windows (PowerShell / CMD)
 ```powershell
 git clone https://github.com/abidhasannir/moviebox-ui.git; cd moviebox-ui; python movie.py
 ```
 
-### 🪟 Windows (Command Prompt - CMD)
+### 📦 Standalone Desktop Application (`MovieBox.exe`)
+To build a standalone `.exe` desktop application for Windows:
 ```cmd
-git clone https://github.com/abidhasannir/moviebox-ui.git && cd moviebox-ui && python movie.py
+python build_exe.py
 ```
+This packages the entire application into `dist/MovieBox/MovieBox.exe` which can be distributed and run on any Windows PC without Python installed!
 
 > 💡 **Zero Configuration Required!**  
 > `movie.py` automatically sets up an isolated Python virtual environment (`venv`), installs all dependencies, registers the global **`movie`** CLI command, starts the server on `http://localhost:8000/`, and opens your browser.
