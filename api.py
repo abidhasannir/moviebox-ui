@@ -110,7 +110,7 @@ async def _make_request(url: str, method: str = "GET", payload: dict = None, cus
 from fastapi.responses import FileResponse
 import os
 
-WEB_UI_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "web-ui"))
+WEB_UI_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "web-ui"))
 
 @app.get("/")
 async def root():

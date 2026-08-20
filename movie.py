@@ -85,13 +85,8 @@ def main():
 
     print("🎬 Starting MovieBox Web UI...")
     
-    api_dir = os.path.join(base_dir, "Moviebox-API-main")
-    if not os.path.exists(api_dir):
-        print("❌ Error: Moviebox-API-main directory not found!")
-        sys.exit(1)
-        
     try:
-        venv_python = setup_venv_and_install(api_dir)
+        venv_python = setup_venv_and_install(base_dir)
     except Exception as e:
         print(f"❌ Failed to setup environment or install dependencies: {e}")
         sys.exit(1)
@@ -99,7 +94,7 @@ def main():
     try:
         api_process = subprocess.Popen(
             [venv_python, "api.py"],
-            cwd=api_dir,
+            cwd=base_dir,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
